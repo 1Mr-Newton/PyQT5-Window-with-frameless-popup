@@ -20,7 +20,21 @@ class Popup(QDialog):
     def __init__(self, parent=None):
         QDialog.__init__(self)
         self.ui = loadUi('popup.ui', self)
-        # self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.pushButton.clicked.connect(self.close)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.moving = True
+            self.offset = event.pos()
+
+    def mouseMoveEvent(self, event):
+        if self.moving:
+            self.move(self.pos() + event.pos() - self.offset)
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.moving = False
 
 
 if __name__ == "__main__":
